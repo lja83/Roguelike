@@ -3,10 +3,6 @@ import libtcodpy as libtcod
 SCREEN_WIDTH = 46
 SCREEN_HEIGHT = 20
 
-def enum(*sequential, **named):
-	enums = dict(zip(sequential, range(len(sequential))), **named)
-	return type('Enum', (), enums)
-
 MAPTEXT = [
 	'##############################################',
 	'#######################      #################',
@@ -30,6 +26,37 @@ MAPTEXT = [
 	'##############################################',
 ]
 
+def enum(*sequential, **named):
+	enums = dict(zip(sequential, range(len(sequential))), **named)
+	return type('Enum', (), enums)
+
+class Tile:
+	def __init__(self, passable, transparent, symbol):
+		self.passable = passable
+		self.transparent = transparent
+		self.symbol = symbol
+
+class Map:
+	def __init__(self, width=0, height=0):
+		self.width = width
+		self.height = height
+		self.map = []
+	
+	def generate_map(self):
+		y = 0
+		for row in MAPTEXT:
+			self.map.append([])
+			for char in row:
+				if (char == '#'):
+					tile = Tile(False, False, '#')
+				elif (char == ' '):
+					tile = Tile(True, True, ' ')
+				elif (char == '='):
+					tile = Tile(False, True, '=')
+				self.map[-1].append(tile)
+		self.height = len(self.map)
+		self.width = len(self.map[0])
+
 RNG = libtcod.random_get_instance()
 
 class Character:
@@ -44,18 +71,24 @@ class Character:
 		self.x += x
 		self.y += y
 
+gameMap = Map()
+gameMap.generate_map()
+
 player = Character()
 player.hp = 10
 player.mp = 2
 player.symbol = '@'
 player.color = libtcod.white
 
+print gameMap.height
+print gameMap.width
+
 player.x = 0
 player.y = 0
-while (MAPTEXT[player.y][player.x] != ' '):
-	player.y = libtcod.random_get_int(RNG, 0, len(MAPTEXT) - 1)
+while (gameMap.map[player.y][player.x].passable != True):
+	player.y = libtcod.random_get_int(RNG, 0, gameMap.height - 1)
 	print "y", player.y
-	player.x = libtcod.random_get_int(RNG, 0, len(MAPTEXT[player.y]) - 1)
+	player.x = libtcod.random_get_int(RNG, 0, gameMap.width - 1)
 	print "x", player.x
 
 characters = [
@@ -69,9 +102,9 @@ while (not libtcod.console_is_window_closed()):
 		#Clear screen
 	libtcod.console_clear(0)
 		#Draw map
-	for y in range(len(MAPTEXT)):
-		for x in range(len(MAPTEXT[y])):
-			libtcod.console_put_char(0, x, y, MAPTEXT[y][x], libtcod.BKGND_NONE)
+	for y in range(gameMap.height):
+		for x in range(gameMap.width):
+			libtcod.console_put_char(0, x, y, gameMap.map[y][x].symbol, libtcod.BKGND_NONE)
 		#Draw items
 		#Draw characters
 	for character in characters:
