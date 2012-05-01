@@ -1,5 +1,4 @@
 import libtcodpy as libtcod
-import random
 
 SCREEN_WIDTH = 46
 SCREEN_HEIGHT = 20
@@ -31,6 +30,8 @@ MAPTEXT = [
 	'##############################################',
 ]
 
+RNG = libtcod.random_get_instance()
+
 class Character:
 	def __init__(self):
 		self.hp = None
@@ -52,9 +53,9 @@ player.color = libtcod.white
 player.x = 0
 player.y = 0
 while (MAPTEXT[player.y][player.x] != ' '):
-	player.y = random.randint(0, len(MAPTEXT) - 1)
+	player.y = libtcod.random_get_int(RNG, 0, len(MAPTEXT) - 1)
 	print "y", player.y
-	player.x = random.randint(0, len(MAPTEXT[player.y]) - 1)
+	player.x = libtcod.random_get_int(RNG, 0, len(MAPTEXT[player.y]) - 1)
 	print "x", player.x
 
 characters = [
