@@ -1,5 +1,6 @@
 #include <libtcod.hpp>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Character {
@@ -11,7 +12,7 @@ class Character {
         char m_symbol;
     
     public:
-        Character(char symbol, int x, int y) {
+        Character(char symbol='@', int x=1, int y=1) {
             m_hp = 100;
             m_mp = 0;
             m_x =  x;
@@ -39,17 +40,24 @@ bool quitGame = false;
 
 int main(void) {
     TCODConsole::initRoot(80, 50, "libtcod C++ sample", false);
-    // TCODConsole::credits();
+    TCODConsole::credits();
     
     TCODConsole::root->setBackgroundColor(TCODColor::black);
     TCODConsole::root->setForegroundColor(TCODColor::white);
     
-    Character player('@', 1, 1);
+    vector<Character> Characters;
+    Characters.push_back(Character('@', 1, 1));
+    Characters.push_back(Character('O', 5, 5));
+    
+    Character *player = &Characters[0];
     
     while(!quitGame and !TCODConsole::isWindowClosed()) {
         TCODConsole::root->clear();
         
-        TCODConsole::root->putChar(player.x(), player.y(), player.symbol(), TCOD_BKGND_SET);
+        for(int i = 0; i < Characters.size(); i ++) {
+            Character *tempChar = &Characters[i];
+            TCODConsole::root->putChar(tempChar->x(), tempChar->y(), tempChar->symbol(), TCOD_BKGND_SET);
+        }
         
         TCODConsole::flush();
         
@@ -58,15 +66,15 @@ int main(void) {
             
             #define KEY(keycode, func) case keycode: func; break;
                 KEY( TCODK_ESCAPE, quitGame = true;    )
-                KEY( TCODK_KP1,    player.Move(-1,  1) )
-                KEY( TCODK_KP2,    player.Move( 0,  1) )
-                KEY( TCODK_KP3,    player.Move( 1,  1) )
-                KEY( TCODK_KP4,    player.Move(-1,  0) )
-                KEY( TCODK_KP5,    player.Move( 0,  0) )
-                KEY( TCODK_KP6,    player.Move( 1,  0) )
-                KEY( TCODK_KP7,    player.Move(-1, -1) )
-                KEY( TCODK_KP8,    player.Move( 0, -1) )
-                KEY( TCODK_KP9,    player.Move( 1, -1) )
+                KEY( TCODK_KP1,    player->Move(-1,  1) )
+                KEY( TCODK_KP2,    player->Move( 0,  1) )
+                KEY( TCODK_KP3,    player->Move( 1,  1) )
+                KEY( TCODK_KP4,    player->Move(-1,  0) )
+                KEY( TCODK_KP5,    player->Move( 0,  0) )
+                KEY( TCODK_KP6,    player->Move( 1,  0) )
+                KEY( TCODK_KP7,    player->Move(-1, -1) )
+                KEY( TCODK_KP8,    player->Move( 0, -1) )
+                KEY( TCODK_KP9,    player->Move( 1, -1) )
             #undef KEY
             
             default:
