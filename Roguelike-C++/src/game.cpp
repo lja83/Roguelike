@@ -44,16 +44,16 @@ int main(void) {
     
     TCODConsole::root->setBackgroundColor(TCODColor::black);
     TCODConsole::root->setForegroundColor(TCODColor::white);
-    
+
     vector<Character> Characters;
     Characters.push_back(Character('@', 1, 1));
     Characters.push_back(Character('O', 5, 5));
     
     Character *player = &Characters[0];
     
-    while(!quitGame and !TCODConsole::isWindowClosed()) {
+    while(!quitGame && !TCODConsole::isWindowClosed()) {
         TCODConsole::root->clear();
-        
+		
         for(int i = 0; i < Characters.size(); i ++) {
             Character *tempChar = &Characters[i];
             TCODConsole::root->putChar(tempChar->x(), tempChar->y(), tempChar->symbol(), TCOD_BKGND_SET);
@@ -65,7 +65,7 @@ int main(void) {
         switch (key.vk) {
             
             #define KEY(keycode, func) case keycode: func; break;
-                KEY( TCODK_ESCAPE, quitGame = true;    )
+                KEY( TCODK_ESCAPE, quitGame = true;     )
                 KEY( TCODK_KP1,    player->Move(-1,  1) )
                 KEY( TCODK_KP2,    player->Move( 0,  1) )
                 KEY( TCODK_KP3,    player->Move( 1,  1) )
