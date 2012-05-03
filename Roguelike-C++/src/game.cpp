@@ -2,8 +2,6 @@
 #include <iostream>
 using namespace std;
 
-#define MOVEKEY(keycode, x, y) case keycode: player.Move(x, y); break;
-
 class Character {
     private:
         int  m_hp;
@@ -57,18 +55,19 @@ int main(void) {
         
         TCOD_key_t key = TCODConsole::waitForKeypress(true);
         switch (key.vk) {
-             case TCODK_ESCAPE:
-                 quitGame = true;
-                 break;
             
-            MOVEKEY( TCODK_KP4, -1,  0 )
-            MOVEKEY( TCODK_KP6,  1,  0 )
-            MOVEKEY( TCODK_KP8,  0, -1 )
-            MOVEKEY( TCODK_KP2,  0,  1 )
-            MOVEKEY( TCODK_KP7, -1, -1 )
-            MOVEKEY( TCODK_KP9,  1, -1 )
-            MOVEKEY( TCODK_KP1, -1,  1 )
-            MOVEKEY( TCODK_KP3,  1,  1 )
+            #define KEY(keycode, func) case keycode: func; break;
+                KEY( TCODK_ESCAPE, quitGame = true;    )
+                KEY( TCODK_KP1,    player.Move(-1,  1) )
+                KEY( TCODK_KP2,    player.Move( 0,  1) )
+                KEY( TCODK_KP3,    player.Move( 1,  1) )
+                KEY( TCODK_KP4,    player.Move(-1,  0) )
+                KEY( TCODK_KP5,    player.Move( 0,  0) )
+                KEY( TCODK_KP6,    player.Move( 1,  0) )
+                KEY( TCODK_KP7,    player.Move(-1, -1) )
+                KEY( TCODK_KP8,    player.Move( 0, -1) )
+                KEY( TCODK_KP9,    player.Move( 1, -1) )
+            #undef KEY
             
             default:
                 break;
