@@ -1,0 +1,5 @@
+*.exe
+*.o
+SDL.dll
+libtcod-mingw.dll
+terminal.png
