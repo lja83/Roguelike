@@ -8,6 +8,7 @@ private:
 	int  m_x;
 	int  m_y;
 	char m_symbol;
+
 public:
     Creature(char symbol='@', int x=1, int y=1) {
         m_hp = 100;

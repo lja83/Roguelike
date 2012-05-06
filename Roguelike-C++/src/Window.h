@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __WINDOW_H
+#define __WINDOW_H
+
+#include <libtcod.hpp>
 
 class Window {
 private:
@@ -23,3 +26,5 @@ public:
     void set_pos(int x, int y) { m_posX = x; m_posY = y; };
     void render() { (*m_render_func)(this); };
 };
+
+#endif

@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Creature.h" />
+    <ClInclude Include="..\..\..\src\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6CC02A8C-465C-4301-8D05-0484E8595A75}</ProjectGuid>
