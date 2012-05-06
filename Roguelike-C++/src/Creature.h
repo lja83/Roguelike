@@ -1,5 +1,4 @@
-#ifndef __CREATURE_H
-#define __CREATURE_H
+#pragma once
 
 class Creature
 {
@@ -29,5 +28,3 @@ public:
 	
 	void Move(int x, int y) { m_x += x; m_y += y; };
 };
-
-#endif
