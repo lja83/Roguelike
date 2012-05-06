@@ -1,7 +1,8 @@
+BUILDDIR=./
 LIBTCODDIR=./../libtcod-1.5.0
 
 all:
-	cd src && make
+	cd src && make LIBTCODDIR="./../$(LIBTCODDIR)" BUILDDIR="./../$(BUILDDIR)"
 	cp $(LIBTCODDIR)/libtcod-mingw.dll ./
 	cp $(LIBTCODDIR)/SDL.dll ./
 	cp $(LIBTCODDIR)/terminal.png ./

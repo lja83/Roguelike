@@ -1,21 +1,24 @@
-BUILDDIR=./../
-
-LIBTCODDIR=./../../libtcod-1.5.0
 INCDIR=$(LIBTCODDIR)/include
 LIBDIR=$(LIBTCODDIR)/lib
-CFLAGS=$(FLAGS) -I$(INCDIR) -L$(LIBDIR) -Wall
+CFLAGS=-I$(INCDIR) -Wall -c
+LDFLAGS=-L$(LIBDIR) -ltcod-mingw
 CPP=mingw32-g++
 
-all: game
+SOURCES=game.cpp Creature.cpp
 
-game: game.o Creature.o
-	$(CPP) $(CFLAGS) *.o -ltcod-mingw -o $(BUILDDIR)/Game.exe
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=$(BUILDDIR)/Game.exe
 
-game.o: game.cpp
-	$(CPP) $(CFLAGS) -c game.cpp -o game.o
+all: $(SOURCES) $(EXECUTABLE)
 
-Creature.o: Creature.cpp Creature.h
-	$(CPP) $(CFLAGS) -c Creature.cpp -o Creature.o
+$(EXECUTABLE): $(OBJECTS)
+	$(CPP) $(OBJECTS) -o $@ $(LDFLAGS)
+
+-include $(OBJECTS:.o=.o.d)
+
+.cpp.o:
+	$(CPP) $(CFLAGS) $< -o $@
+	$(CPP) -MM $(CFLAGS) $< > $@.d
 
 clean:
-	rm *.o &
+	rm *.o *.d &

@@ -1,5 +1,6 @@
 *.exe
 *.o
+*.d
 SDL.dll
 libtcod-mingw.dll
 terminal.png
