@@ -16,6 +16,7 @@ bool quitGame = false;
 
 vector<Creature> Creatures;
 vector<Window> Windows;
+Creature *player = NULL;
 
 int message_cursor = 1;
 deque<string> Messages;
@@ -76,6 +77,27 @@ void move_creature(Creature *creature, int x, int y) {
     creature->Move(x, y);
 }
 
+void handle_command(TCOD_key_t key) {
+    switch (key.vk) {
+        
+        #define KEY(keycode, func) case keycode: func; break;
+            KEY( TCODK_ESCAPE, quitGame = true;     )
+            KEY( TCODK_KP1,    move_creature(player, -1,  1) )
+            KEY( TCODK_KP2,    move_creature(player,  0,  1) )
+            KEY( TCODK_KP3,    move_creature(player,  1,  1) )
+            KEY( TCODK_KP4,    move_creature(player, -1,  0) )
+            KEY( TCODK_KP5,    write_message("Test message") )
+            KEY( TCODK_KP6,    move_creature(player,  1,  0) )
+            KEY( TCODK_KP7,    move_creature(player, -1, -1) )
+            KEY( TCODK_KP8,    move_creature(player,  0, -1) )
+            KEY( TCODK_KP9,    move_creature(player,  1, -1) )
+        #undef KEY
+        
+        default:
+            break;
+    }
+}
+
 int main(void) {
     TCODConsole::initRoot(WIDTH, HEIGHT, "libtcod C++ sample", false);
     //TCODConsole::credits();
@@ -92,30 +114,13 @@ int main(void) {
     Creatures.push_back(Creature('@', 1, 1));
     Creatures.push_back(Creature('O', 5, 5));
     
-    Creature *player = &Creatures[0];
+    player = &Creatures[0];
     
     while(!quitGame && !TCODConsole::isWindowClosed()) {
         render_screen();
 
         TCOD_key_t key = TCODConsole::waitForKeypress(true);
-        switch (key.vk) {
-            
-            #define KEY(keycode, func) case keycode: func; break;
-                KEY( TCODK_ESCAPE, quitGame = true;     )
-                KEY( TCODK_KP1,    move_creature(player, -1,  1) )
-                KEY( TCODK_KP2,    move_creature(player,  0,  1) )
-                KEY( TCODK_KP3,    move_creature(player,  1,  1) )
-                KEY( TCODK_KP4,    move_creature(player, -1,  0) )
-                KEY( TCODK_KP5,    write_message("Test message") )
-                KEY( TCODK_KP6,    move_creature(player,  1,  0) )
-                KEY( TCODK_KP7,    move_creature(player, -1, -1) )
-                KEY( TCODK_KP8,    move_creature(player,  0, -1) )
-                KEY( TCODK_KP9,    move_creature(player,  1, -1) )
-            #undef KEY
-            
-            default:
-                break;
-        }
+        handle_command(key);
     }
     
     return 0;
