@@ -72,6 +72,10 @@ void render_screen(void) {
     TCODConsole::flush();
 }
 
+void move_creature(Creature *creature, int x, int y) {
+    creature->Move(x, y);
+}
+
 int main(void) {
     TCODConsole::initRoot(WIDTH, HEIGHT, "libtcod C++ sample", false);
     //TCODConsole::credits();
@@ -98,15 +102,15 @@ int main(void) {
             
             #define KEY(keycode, func) case keycode: func; break;
                 KEY( TCODK_ESCAPE, quitGame = true;     )
-                KEY( TCODK_KP1,    player->Move(-1,  1) )
-                KEY( TCODK_KP2,    player->Move( 0,  1) )
-                KEY( TCODK_KP3,    player->Move( 1,  1) )
-                KEY( TCODK_KP4,    player->Move(-1,  0) )
+                KEY( TCODK_KP1,    move_creature(player, -1,  1) )
+                KEY( TCODK_KP2,    move_creature(player,  0,  1) )
+                KEY( TCODK_KP3,    move_creature(player,  1,  1) )
+                KEY( TCODK_KP4,    move_creature(player, -1,  0) )
                 KEY( TCODK_KP5,    write_message("Test message") )
-                KEY( TCODK_KP6,    player->Move( 1,  0) )
-                KEY( TCODK_KP7,    player->Move(-1, -1) )
-                KEY( TCODK_KP8,    player->Move( 0, -1) )
-                KEY( TCODK_KP9,    player->Move( 1, -1) )
+                KEY( TCODK_KP6,    move_creature(player,  1,  0) )
+                KEY( TCODK_KP7,    move_creature(player, -1, -1) )
+                KEY( TCODK_KP8,    move_creature(player,  0, -1) )
+                KEY( TCODK_KP9,    move_creature(player,  1, -1) )
             #undef KEY
             
             default:
