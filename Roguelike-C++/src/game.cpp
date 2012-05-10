@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <deque>
+#include <sstream>
 
 #include "Creature.h"
 #include "Window.h"
@@ -15,6 +17,13 @@ bool quitGame = false;
 vector<Creature> Creatures;
 vector<Window> Windows;
 
+int message_cursor = 1;
+deque<string> Messages;
+
+void write_message(const char *str) {
+    Messages.push_front(str);
+}
+
 void render_map(Window *win) {
     TCODConsole *con = win->con();
 
@@ -27,11 +36,21 @@ void render_map(Window *win) {
 
 void render_messages(Window *win) {
     TCODConsole *con = win->con();
-    string horizBorder(con->getWidth(), '-');
-    con->printLeft(0, 0, TCOD_BKGND_SET, horizBorder.c_str());
-    con->printLeft(1, 1, TCOD_BKGND_SET, "This is a test");
-    for(unsigned int i = 2; i < 10; i ++) {
-        con->printLeft(1, i, TCOD_BKGND_SET, "%d", i);
+    con->clear();
+    int message_size = 0;
+    int cursor_location = con->getHeight();
+    int wrap_width = con->getWidth();
+
+    string border = string(con->getWidth(), '-');
+    con->printLeft(0, 0, TCOD_BKGND_SET, border.c_str());
+
+    for(unsigned int i = 0; i < Messages.size(); i++) {
+        message_size = con->getHeightLeftRect(0, 0, wrap_width, con->getHeight(), Messages[i].c_str());
+        cursor_location -= message_size;
+        if (cursor_location < 1) {
+            break;
+        }
+        con->printLeftRect(0, cursor_location, wrap_width, con->getHeight(), TCOD_BKGND_SET, Messages[i].c_str());
     }
 }
 
@@ -83,7 +102,7 @@ int main(void) {
                 KEY( TCODK_KP2,    player->Move( 0,  1) )
                 KEY( TCODK_KP3,    player->Move( 1,  1) )
                 KEY( TCODK_KP4,    player->Move(-1,  0) )
-                KEY( TCODK_KP5,    player->Move( 0,  0) )
+                KEY( TCODK_KP5,    write_message("Test message") )
                 KEY( TCODK_KP6,    player->Move( 1,  0) )
                 KEY( TCODK_KP7,    player->Move(-1, -1) )
                 KEY( TCODK_KP8,    player->Move( 0, -1) )
