@@ -1,5 +1,5 @@
 BUILDDIR=./
-LIBTCODDIR=./../libtcod-1.5.0
+LIBTCODDIR=./lib/libtcod-1.5.0
 
 all:
 	cd src && make LIBTCODDIR="./../$(LIBTCODDIR)" BUILDDIR="./../$(BUILDDIR)"
