@@ -15,11 +15,59 @@ bool quitGame = false;
 #define HEIGHT 50
 
 vector<Creature> Creatures;
-vector<Window> Windows;
 Creature *player = NULL;
 
-int message_cursor = 1;
+vector<Window> Windows;
+
 deque<string> Messages;
+
+class Tile {
+private:
+    char m_symbol;
+    bool m_blocking;
+    bool m_transparent;
+public:
+    char symbol()      { return m_symbol; };
+    bool blocking()    { return m_blocking; };
+    bool transparent() { return m_transparent; };
+
+    void symbol(char newSymbol)           { m_symbol = newSymbol; };
+    void blocking(bool newBlocking)       { m_blocking = newBlocking; };
+    void transparent(bool newTransparent) { m_transparent = newTransparent; };
+};
+
+class Map {
+private:
+    int m_width;
+    int m_height;
+    vector<Tile> m_tiles;
+public:
+    Map(string bareMap);
+
+    int width()  { return m_width; };
+    int height() { return m_height; };
+
+    void width(int newWidth)   { m_width = newWidth; };
+    void height(int newHeight) { m_height = newHeight; };
+};
+
+Map::Map(string bareMap) {
+    int w = 0;
+    int h = 0;
+
+    char temp = bareMap[(h*w)+w];
+    while(bareMap[(h*w) + w] != NULL) {
+        if (temp == '\n') {
+            h++;
+            w = 0;
+        } else {
+            w ++;
+            cout << temp;
+        }
+        temp = bareMap[(h*w)+w];
+    }
+    cout << endl << w << ' ' << h;
+}
 
 void write_message(const char *str) {
     Messages.push_front(str);
@@ -74,6 +122,16 @@ void render_screen(void) {
 }
 
 void move_creature(Creature *creature, int x, int y) {
+    int newX = creature->x() + x;
+    int newY = creature->y() + y;
+
+    if ((newX < 0) || (newX >= mainScreen.con()->getWidth())) {
+        x = 0;
+    }
+    if ((newY < 0) || (newY >= mainScreen.con()->getHeight())) {
+        y = 0;
+    }
+
     creature->Move(x, y);
 }
 
@@ -123,5 +181,7 @@ int main(void) {
         handle_command(key);
     }
     
+    Map newMap("Something\nNew");
+
     return 0;
 }
